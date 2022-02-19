@@ -3,6 +3,7 @@ package br.com.stanev.cookbook.domain;
 import br.com.stanev.cookbook.enums.Categoria;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Receita {
@@ -10,12 +11,13 @@ public class Receita {
     private Categoria categoria;
     private double tempoPreparo;
     private Rendimento rendimento;
-    private List<Ingrediente> ingredientes;
-    private List<String> preparo;
+    private List<Ingrediente> ingredientes = new LinkedList<Ingrediente>();
+    private List<String> preparo = new LinkedList<String>();
 
     public Receita(String nome, Categoria categoria) {
         this.nome = nome;
         this.categoria = categoria;
+        this.tempoPreparo = 0.0;
     }
 
     public Receita(Receita origem) {
@@ -67,6 +69,26 @@ public class Receita {
         this.rendimento = rendimento;
     }
 
+    public void setIngrediente(Ingrediente ingrediente) {
+     	this.ingredientes.add(ingrediente);
+    }
+  
+    public void delIngrediente(int indice) {
+     	this.ingredientes.remove(indice);
+    }
+    
+    public void setPreparo(String nome) {
+    	this.preparo.add(nome);
+    }
+
+    public void setPreparoLocal(String nome, int local) {
+    	this.preparo.add(local, nome);
+    }
+     
+    public void delPreparo(int indice) {
+    	this.preparo.remove(indice);
+    }
+    
     @Override
     public String toString() {
         return "br.com.letscode.cookbook.domain.Receita{" +

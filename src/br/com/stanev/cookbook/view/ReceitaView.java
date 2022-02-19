@@ -51,15 +51,6 @@ public class ReceitaView {
         if (receita.getPreparo() == null || receita.getPreparo().isEmpty()) {
             out.printf("%s%n", "Nenhum preparo encontrado!");
         } else {
-//            for (int i = 0; i < receita.getPreparo().size(); i++) {
-//                out.println(receita.getPreparo().get(i));
-//            }
-//            for (String s : receita.getPreparo()) {
-//                out.println(s);
-//            }
-//            receita.getPreparo().forEach(s -> {
-//                out.println(s);
-//            });
             receita.getPreparo().forEach(out::println);
         }
     }

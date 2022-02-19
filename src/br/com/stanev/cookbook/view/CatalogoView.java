@@ -67,26 +67,25 @@ public class CatalogoView {
             case "L":
                 find();
                 break;
+            case "E":
+            	edit();
+            	break;
             case "X":
                 System.out.println("Obrigado!!");
                 return false;
             default:
-                System.out.println("Opﾃｧﾃ｣o invﾃ｡lida!!!");
+                System.out.println("Op鈬o Inv疝ida!!!");
         }
         return true;
     }
 
     private void find() {
-        //Capturar o nome da receita.
         String name = ConsoleUtils.getUserInput("Qual o nome da receita que deseja localizar?");
-        //Procura no Catalogo a receita com o mesmo nome.
         ative = controller.getReceita(name);
         currentIndex = 0;
     }
 
     private void next() {
-        //Se estiver com uma receita ativa, ativa a prﾃｳxima receita.
-        //Se Nﾃグ estiver com uma receita ativa, ativa a primeira receita.
         if (ative != null) currentIndex++;
         try {
             ative = controller.getReceita(currentIndex);
@@ -100,8 +99,6 @@ public class CatalogoView {
     }
 
     private void previous() {
-        //Se estiver com uma receita ativa, ativa a anterior.
-        //Se Nﾃグ estiver com uma receita ativa, ativa a ﾃｺltima receita.
         if (ative != null) currentIndex--;
         try {
             ative = controller.getReceita(currentIndex);
@@ -115,10 +112,7 @@ public class CatalogoView {
     }
 
     private void del() {
-        //Se Nﾃグ estiver com uma receita ativa, mostra mensagem.
-        //Se estiver com uma receita ativa, confirma a operaﾃｧﾃ｣o.
         String opcao = ConsoleUtils.getUserOption("Vocﾃｪ deseja realmente APAGAR a receita " + ative.getNome() + "?\nS - Sim   N - Nﾃ｣o", "S", "N");
-        //Se confirmar, solicita ao Catalogo apagar a receita.
         if (opcao.equalsIgnoreCase("S")) {
             controller.del(ative.getNome());
             ative = null;
@@ -130,34 +124,26 @@ public class CatalogoView {
     }
 
     private void edit() {
-        //Se Nﾃグ estiver com uma receita ativa, mostra mensagem.
-        //Se estiver com uma receita ativa, abra a tela de ediﾃｧﾃ｣o.
-        Receita nova = new EditReceitaView(ative).edit();
+    	new ReceitaView(ative).fullView(System.out);
+        Receita nova = new EditReceitaView(ative, 1).edit();
         if (nova != null) {
             controller.del(ative.getNome());
             controller.add(nova);
-            //Torna a nova receita a ativa.
             ative = nova;
             currentIndex = 0;
         }
     }
 
     private void add() {
-        //Capturar o nome da receita.
         String name = ConsoleUtils.getUserInput("Qual o nome da nova receita?");
         if (!name.isBlank()) {
-            //Procura no Catalogo a receita com o mesmo nome.
             Receita other = controller.getReceita(name);
-            //Se encontrar, mostra mensagem.
             if (other != null) {
                 String opcao = ConsoleUtils.getUserOption("Receita jﾃ｡ existente!%nVocﾃｪ deseja visualizar?%nS - Sim   N - Nﾃ｣o", "S", "N");
-                //Se confirmar, solicita ao Catalogo apagar a receita.
                 if (opcao.equalsIgnoreCase("S")) {
                     ative = other;
                 }
             } else {
-                //Se Nﾃグ encontrar continua.
-                //Capturar dados da nova receita.
                 StringBuilder sb = new StringBuilder("Qual a categoria da nova receita?\n");
                 String[] options = new String[Categoria.values().length];
                 for (int i = 0; i < options.length; i++) {
@@ -172,12 +158,9 @@ public class CatalogoView {
                         break;
                     }
                 }
-                //Cria uma nova receita.
-                Receita nova = new EditReceitaView(new Receita(name, categoria)).edit();
+                Receita nova = new EditReceitaView(new Receita(name, categoria),2).edit();
                 if (nova != null) {
-                    //Passa a receita para o Catalogo adicionar.
                     controller.add(nova);
-                    //Torna a nova receita a ativa.
                     ative = nova;
                     currentIndex = 0;
                 }
@@ -187,9 +170,7 @@ public class CatalogoView {
 
     public void view() {
         do {
-            //Exibe o layout montado.
             new ReceitaView(ative).fullView(System.out);
-            //Exibe o menu de opﾃｧﾃｵes.
         } while (showMenu());
     }
 }
