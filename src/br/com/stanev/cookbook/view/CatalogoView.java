@@ -37,7 +37,7 @@ public class CatalogoView {
         }
 
         if (controller.getTotal() > 1) {
-            sb.append("  P : PrÃ³xima  %n");
+            sb.append("  P : Próxima  %n");
             options[3] = "P";
             sb.append("  A : Anterior  %n");
             options[4] = "A";
@@ -127,10 +127,25 @@ public class CatalogoView {
     	new ReceitaView(ative).fullView(System.out);
         Receita nova = new EditReceitaView(ative, 1).edit();
         if (nova != null) {
-            controller.del(ative.getNome());
-            controller.add(nova);
-            ative = nova;
-            currentIndex = 0;
+        	if (nova.getNome() != ative.getNome()) {
+        		Receita other = controller.getReceita(nova.getNome());
+        		if (other != null) {
+        			String opcao = ConsoleUtils.getUserOption("Receita já existente!%nVocê deseja visualizar?%nS - Sim   N - Não", "S", "N");
+        			if (opcao.equalsIgnoreCase("S")) {
+        				ative = other;
+        			}
+                } else {
+                    controller.del(ative.getNome());
+                    controller.add(nova);
+                    ative = nova;
+                    currentIndex = 0;                	
+                }
+        	} else {
+                controller.del(ative.getNome());
+                controller.add(nova);
+                ative = nova;
+                currentIndex = 0;                        		
+        	}
         }
     }
 
@@ -139,7 +154,7 @@ public class CatalogoView {
         if (!name.isBlank()) {
             Receita other = controller.getReceita(name);
             if (other != null) {
-                String opcao = ConsoleUtils.getUserOption("Receita jÃ¡ existente!%nVocÃª deseja visualizar?%nS - Sim   N - NÃ£o", "S", "N");
+                String opcao = ConsoleUtils.getUserOption("Receita já¡ existente!%nVocê deseja visualizar?%nS - Sim   N - Não", "S", "N");
                 if (opcao.equalsIgnoreCase("S")) {
                     ative = other;
                 }

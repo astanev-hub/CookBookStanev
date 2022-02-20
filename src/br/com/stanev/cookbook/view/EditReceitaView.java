@@ -5,6 +5,7 @@ import java.util.Locale;
 import br.com.stanev.cookbook.domain.Ingrediente;
 import br.com.stanev.cookbook.domain.Receita;
 import br.com.stanev.cookbook.domain.Rendimento;
+import br.com.stanev.cookbook.enums.Categoria;
 import br.com.stanev.cookbook.enums.TipoMedida;
 import br.com.stanev.cookbook.enums.TipoRendimento;
 
@@ -41,32 +42,42 @@ public class EditReceitaView {
     }
 
     private String showMenu() {
-        String[] options = new String[6];
+        String[] options = new String[8];
         StringBuilder sb = new StringBuilder("#".repeat(100));
 
-        sb.append("%n").append("  T : Tempo de Preparo %n");
-        options[0] = "T";
+        sb.append("%n").append("  N : Nome %n");
+        options[0] = "N";
+        sb.append("  C : Categoria %n");
+        options[1] = "C";
+        sb.append("  T : Tempo de Preparo %n");
+        options[2] = "T";
         sb.append("  R : Rendimento %n");
-        options[1] = "R";
+        options[3] = "R";
         sb.append("  I : Ingredientes %n");
-        options[2] = "I";
+        options[4] = "I";
         sb.append("  P : Preparos %n");
-        options[3] = "P";
+        options[5] = "P";
 
         sb.append("  # ").append("# ".repeat(48)).append("%n");
         sb.append("  X : Sair sem salvar a receita%n");
-        options[4] = "X";
+        options[6] = "X";
 
         sb.append("  S : Sair salvando a receita %n");
-        options[5] = "S";
+        options[7] = "S";
         
         sb.append("#".repeat(100)).append("%n");
 
         String opcao = ConsoleUtils.getUserOption(sb.toString(), options).toUpperCase(Locale.getDefault());
         switch (opcao) {
-            case "T":
-                tempoPreparo();
+            case "N":
+                nome();
                 break;
+            case "C":
+            	categoria();
+            	break;
+            case "T":
+            	tempoPreparo();
+            	break;
             case "R":
                 rendimento();
                 break;
@@ -271,5 +282,30 @@ public class EditReceitaView {
         double tempo = ConsoleUtils.getUserDouble("Qual o tempo de preparo, em minutos?");
         receita.setTempoPreparo(tempo);		
 	}
+	
+	private void nome() {
+        String name = ConsoleUtils.getUserInput("Qual o novo nome da receita?");
+        if (!name.isBlank()) {
+        	receita.setNome(name);
+        }
+	}
 
+	private void categoria() {
+        StringBuilder sb = new StringBuilder("Qual a nova categoria da receita?\n");
+        String[] options = new String[Categoria.values().length];
+        for (int i = 0; i < options.length; i++) {
+            options[i] = String.valueOf(i);
+            sb.append(String.format("%d - %s%n", i, Categoria.values()[i]));
+        }
+        String opcao = ConsoleUtils.getUserOption(sb.toString(), options);
+        Categoria categoria = null;
+        for (int i = 0; i < options.length; i++) {
+            if (opcao.equalsIgnoreCase(options[i])) {
+                categoria = Categoria.values()[i];
+                break;
+            }
+        }
+        receita.setCategoria(categoria);
+	}
+	
 }
